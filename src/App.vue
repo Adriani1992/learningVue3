@@ -6,42 +6,34 @@
     <p>{{ name }}</p>
     <input type="text" v-model="phrase" />
     <p>{{ reversePhrase }}</p>
+    <p>{{ pharseNum }}</p>
   </div>
   <Alert :user="user" />
+
+  <button type="button" ref="btn">Button</button>
 </template>
 
 <script>
-import {
-  ref,
-  reactive,
-  toRefs,
-  watchEffect,
-  computed,
-  onBeforeMount,
-  onMounted,
-} from "vue";
+import { ref, reactive, toRefs, onBeforeMount, onMounted } from "vue";
 import Alert from "@/components/Alert.vue";
+import { useNumber } from "@/hooks/number";
+import { usePharse } from "@/hooks/pharse";
+
 export default {
   name: "App",
   components: {
     Alert,
   },
   setup() {
+    const btn = ref(null);
     onBeforeMount(() => {
       console.log("onBeforeMount");
     });
     onMounted(() => {
       console.log("onMounted");
-    });
-
-    let num = ref(0);
-
-    function increment() {
-      num.value++;
-    }
-
-    const double = computed(() => {
-      return num.value * 2;
+      btn.value.addEventListener("click", () => {
+        console.log("Button has been clicked");
+      });
     });
 
     const user = reactive({
@@ -53,12 +45,9 @@ export default {
       user.name = "Leo";
     }, 3000);
 
-    const phrase = ref("");
-    const reversePhrase = ref("");
-
-    watchEffect(() => {
-      reversePhrase.value = phrase.value.split("").reverse().join("");
-    });
+    const { num, increment, double } = useNumber();
+    const { phrase, reversePhrase, num: pharseNum } = usePharse();
+    //composition API 允許在composition function 這邊同名時直接在此改名
 
     return {
       num,
@@ -68,6 +57,8 @@ export default {
       reversePhrase,
       double,
       user,
+      btn,
+      pharseNum,
     };
   },
 };
