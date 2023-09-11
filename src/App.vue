@@ -13,53 +13,35 @@
   <button type="button" ref="btn">Button</button>
 </template>
 
-<script>
+<script setup>
 import { ref, reactive, toRefs, onBeforeMount, onMounted } from "vue";
 import Alert from "@/components/Alert.vue";
 import { useNumber } from "@/hooks/number";
 import { usePharse } from "@/hooks/pharse";
 
-export default {
-  name: "App",
-  components: {
-    Alert,
-  },
-  setup() {
-    const btn = ref(null);
-    onBeforeMount(() => {
-      console.log("onBeforeMount");
-    });
-    onMounted(() => {
-      console.log("onMounted");
-      btn.value.addEventListener("click", () => {
-        console.log("Button has been clicked");
-      });
-    });
+const btn = ref(null);
+onBeforeMount(() => {
+  console.log("onBeforeMount");
+});
+onMounted(() => {
+  console.log("onMounted");
+  btn.value.addEventListener("click", () => {
+    console.log("Button has been clicked");
+  });
+});
 
-    const user = reactive({
-      name: "Jenny",
-      age: 31,
-    });
+const user = reactive({
+  name: "Jenny",
+  age: 31,
+});
 
-    setTimeout(() => {
-      user.name = "Leo";
-    }, 3000);
+setTimeout(() => {
+  user.name = "Leo";
+}, 3000);
 
-    const { num, increment, double } = useNumber();
-    const { phrase, reversePhrase, num: pharseNum } = usePharse();
-    //composition API 允許在composition function 這邊同名時直接在此改名
+const { num, increment, double } = useNumber();
+const { phrase, reversePhrase, num: pharseNum } = usePharse();
+//composition API 允許在composition function 這邊同名時直接在此改名
 
-    return {
-      num,
-      increment,
-      ...toRefs(user),
-      phrase,
-      reversePhrase,
-      double,
-      user,
-      btn,
-      pharseNum,
-    };
-  },
-};
+const { name } = toRefs(user);
 </script>
